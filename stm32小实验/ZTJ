@@ -1,0 +1,60 @@
+void key(void)
+{
+
+ switch(key_static)
+ {
+ case 0:
+   if(HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_4)== RESET)
+    {
+     key_static++;
+    }
+   break;
+ case 1:
+     if(HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_4)== RESET)
+     {
+			press++;
+      key_static++;
+     }
+     else
+			 {
+      key_static--;
+		 }
+     break;
+ case 2:
+   
+    if(HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_4)== RESET)
+    {
+     press++;
+    }
+    else
+    {
+     key_static++;
+    }
+
+   break;
+ case 3:
+   
+    if(press>200)
+    {
+     LED_TIME+=1000;
+
+    }
+    else
+    
+    press=0;
+    key_static=0;
+   
+   break;
+ }
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  key();
+	if(LED_TIME)
+	{
+		HAL_GPIO_WritePin(GPIOF,GPIO_PIN_9,GPIO_PIN_RESET);
+		LED_TIME--;
+	}
+	else HAL_GPIO_WritePin(GPIOF,GPIO_PIN_9,GPIO_PIN_SET);
+}
